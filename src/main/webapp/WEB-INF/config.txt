@@ -1,0 +1,4 @@
+jdbcUrl = jdbc:mysql://115.29.45.97:3306/stock
+user = stock
+password = stock1234
+devMode = true
