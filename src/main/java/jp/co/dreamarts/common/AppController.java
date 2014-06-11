@@ -8,7 +8,7 @@ import com.jfinal.core.Controller;
 public class AppController extends Controller {
 
     public void index() {
-        System.out.println("good  job 3");
+        System.out.println("good  job 6");
         render("/index.html");
     }
 

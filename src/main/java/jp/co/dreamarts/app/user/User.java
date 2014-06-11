@@ -13,13 +13,9 @@ public class User extends Model<User> {
 
     public static final User dao = new User();
 
-    public static final String ID = "id";
-    public static final String USERNAME = "username";
-
     public List<User> getUserList() {
 
-        List<User> users = User.dao.find("select * from s_user");
-        return users;
+        return User.dao.find("select * from s_user");
     }
 
     public Page<User> getPage() {
