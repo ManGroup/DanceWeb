@@ -38,8 +38,6 @@ public class UserTest {
 
     @Test
     public void testPage() throws Exception {
-        Page<User> page = user.getPage();
-        System.out.println(page);
-
+        Page<User> page = user.getPage(1);
     }
 }

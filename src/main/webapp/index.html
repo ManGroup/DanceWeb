@@ -1,9 +1,220 @@
-<!DOCTYPE html>
+<!DOCTYPE HTML >
 <html>
 <head>
-    <title></title>
+    <title>管理系统</title>
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+    <meta http-equiv="description" content="This is my page">
+
+    <link rel="stylesheet" type="text/css" href="/stylesheets/default.css">
+    <script type="text/javascript" src="/vendor/jquery/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="/vendor/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/vendor/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <link rel="stylesheet" type="text/css" href="/vendor/easyui/themes/gray/easyui.css" id="swicth-style">
+    <link rel="stylesheet" type="text/css" href="/vendor/easyui/themes/icon.css">
+
+    <link rel="stylesheet" href="/vendor/easyui/themes/icon.css" type="text/css"/>
+
+    <script type="text/javascript" src="/javascripts/easyui-extend.js" charset="utf-8"></script>
+    <style type="text/css">
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Hiragino Sans GB W3", "Microsoft YaHei UI", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+    </style>
+    <script type="text/javascript" charset="utf-8">
+        var ctx = "/";
+        var _csrf = "";
+    </script>
 </head>
-<body>
-1111111111
+
+<body class="easyui-layout">
+<noscript>
+    <div style="position: absolute; z-index: 100000; height: 2046px; top: 0px; left: 0px; width: 100%; background: white; text-align: center;">
+        请开启脚本支持!
+    </div>
+</noscript>
+<div data-options="region:'north'" style="height:70px;background-color:rgb(239,239,239)">
+
+</div>
+
+<div data-options="region:'west'" style="width:200px;">
+    <div class="easyui-panel" data-options="title:'功能导航',border:false,fit:true">
+        <script type="text/javascript">
+            $(function () {
+                //初始化导航菜单
+                initMenu();
+            });
+
+            /*  初始化导航菜单 */
+            function initMenu() {
+                $.get("/view/menuJson", function (data) {
+                    $.each(data, function (i, n) {
+                        var menulist = "<div class='easyui-panel' data-options='fit:true,border:false' style='overflow-y:auto;overflow-X: hidden;'><ul>";
+                        $.each(n.children, function (j, o) {//依赖于center界面选项卡layout_center_tabs对象
+                            menulist += "<li><div><strong><a onClick='javascript:eu.addTab(layout_center_tabs,\""
+                                    + o.text + "\",\"" + o.attributes.url + "\",true,\"" + o.iconCls + "\")' style='font-size:14px;' > <span class='tree-icon tree-file " + o.iconCls + "'></span>" + o.text + "</a></strong></div></li> ";
+                        });
+                        menulist += '</ul></div>';
+
+                        $(".easyui-accordion").accordion('add', {
+                            title: n.text,
+                            content: menulist,
+                            iconCls: n.iconCls
+                        });
+
+                    });
+                    $('.easyui-accordion div li div strong a').click(function () {
+                        $('.easyui-accordion li div').removeClass("selected");
+                        $(this).parent().parent().addClass("selected");
+                    }).hover(function () {
+                        $(this).parent().parent().addClass("hover");
+                    }, function () {
+                        $(this).parent().parent().removeClass("hover");
+                    });
+
+                }, "json");
+            }
+        </script>
+        <!-- 导航菜单 -->
+        <div class="easyui-accordion" data-options="animate:false,fit:true,border:true">
+        </div>
+
+    </div>
+</div>
+
+<div data-options="region:'center',title:''" style="overflow: hidden;">
+    <script type="text/javascript">
+        var layout_center_tabs;
+        var layout_center_tabsMenu;
+        $(function() {
+            layout_center_tabs = $('#layout_center_tabs').tabs();
+            layout_center_tabsMenu = $('#layout_center_tabsMenu').menu({
+                onClick : function(item) {
+                    var curTabTitle = $(this).data('tabTitle');
+                    var type = $(item.target).attr('type');
+                    //刷新
+                    if (type === 'refresh') {
+                        refresh(layout_center_tabs.tabs('getTab',curTabTitle));
+                        return;
+                    }
+                    //关闭
+                    if (type === 'close') {
+                        cancel();
+                        return;
+                    }
+
+                    var allTabs = layout_center_tabs.tabs('tabs');
+                    var closeTabsTitle = [];
+
+                    $.each(allTabs, function() {
+                        var opt = $(this).panel('options');
+                        if (opt.closable && opt.title != curTabTitle && type === 'closeOther') {
+                            closeTabsTitle.push(opt.title);
+                        } else if (opt.closable && type === 'closeAll') {
+                            closeTabsTitle.push(opt.title);
+                        }
+                    });
+
+                    for ( var i = 0; i < closeTabsTitle.length; i++) {
+                        layout_center_tabs.tabs('close', closeTabsTitle[i]);
+                    }
+                }
+            });
+
+            //活动中的tip消息
+            var activeTip;
+            layout_center_tabs.tabs({
+                fit : true,
+                border : false,
+                onContextMenu : function(e, title,index) {
+                    e.preventDefault();
+                    layout_center_tabsMenu.menu('show', {
+                        left : e.pageX,
+                        top : e.pageY
+                    }).data('tabTitle', title);
+                },
+                onAdd:function(title,index){
+                    //tip标题提示
+                    var tab = $(this).tabs('getTab',index).panel('options').tab;
+                    tab.unbind('mouseenter').bind('mouseenter',function(e){
+                        activeTip = $(this).tooltip({
+                            position: 'top',
+                            content: title
+                        }).tooltip('show',e);
+                    });
+                },
+                onBeforeClose:function(title,index){
+                    if(activeTip){
+                        activeTip.tooltip('destroy');
+                    }
+                }
+            });
+
+            //首页tip标题提示
+            var indexTitle = "首页";
+            layout_center_tabs.tabs('getTab',indexTitle).panel('options').tab.unbind('mouseenter').bind('mouseenter',function(e){
+                $(this).tooltip({
+                    position: 'top',
+                    content: indexTitle
+                }).tooltip('show',e);
+            });
+        });
+        //刷新
+        function refresh(selectedTab){
+            var tab;
+            if(selectedTab){
+                tab = selectedTab;
+            }else{
+                tab = layout_center_tabs.tabs('getSelected');
+            }
+            var href = tab.panel('options').href;
+            if (href) {/*说明tab是以href方式引入的目标页面*/
+                var index = layout_center_tabs.tabs('getTabIndex', tab);
+                layout_center_tabs.tabs('getTab', index).panel('refresh');
+            } else {/*说明tab是以content方式引入的目标页面*/
+                var panel = tab.panel('panel');
+                var iframe = panel.find('iframe');
+                layout_center_tabs.tabs('updateIframeTab',{
+                    which:tab.panel('options').title,
+                    iframe:{src:iframe[0].src}
+                });
+            }
+        }
+        //关闭
+        function cancel(){
+            var index = layout_center_tabs.tabs('getTabIndex', layout_center_tabs.tabs('getSelected'));
+            var tab = layout_center_tabs.tabs('getTab', index);
+            if (tab.panel('options').closable) {
+                layout_center_tabs.tabs('close', index);
+            } else {
+                eu.showAlertMsg('[' + tab.panel('options').title + ']不可以被关闭.', 'error');
+            }
+        }
+    </script>
+    <div id="layout_center_tabs" data-options="tools:'#layout_center_tabs-tools'" style="overflow: hidden;">
+        <div id="layout_center_tabs_index" title="首页" data-options="href:'/view/portal',iconCls:'icon-application',method:'get'"></div>
+    </div>
+    <div id="layout_center_tabsMenu" style="width: 120px;display:none;">
+        <div type="refresh" data-options="iconCls:'icon-reload'">刷新</div>
+        <div class="menu-sep"></div>
+        <div type="close" data-options="iconCls:'icon-cancel'">关闭</div>
+        <div type="closeOther">关闭其他</div>
+        <div type="closeAll">关闭所有</div>
+    </div>
+    <div id="layout_center_tabs-tools">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true"
+           onclick="javascript:refresh();"></a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-cancel',plain:true"
+           onclick="javascript:cancel();"></a>
+    </div>
+</div>
 </body>
 </html>
