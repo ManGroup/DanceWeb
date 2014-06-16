@@ -1,12 +1,3 @@
-
-<meta http-equiv="pragma" content="no-cache">
-<meta http-equiv="cache-control" content="no-cache">
-<meta http-equiv="expires" content="0">
-<meta http-equiv="X-UA-Compatible" content="IE=EDGE;chrome=1" />
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-
-<meta name="author" content="Antony" />
-
 <script type="text/javascript" charset="utf-8">
     var ctx = "/";
     var _csrf = "";
@@ -18,12 +9,8 @@
 <script type="text/javascript" src="/vendor/easyui/locale/easyui-lang-zh_CN.js"></script>
 <link rel="stylesheet" type="text/css" href="/vendor/easyui/themes/gray/easyui.css" id="swicth-style">
 <link rel="stylesheet" type="text/css" href="/vendor/easyui/themes/icon.css">
-
 <link rel="stylesheet" href="/vendor/easyui/themes/icon.css" type="text/css"/>
-
 <script type="text/javascript" src="/javascripts/easyui-extend.js" charset="utf-8"></script>
-
-
 <script src="/vendor/uploadify/jquery.uploadify.js" type="text/javascript"></script>
 <link rel="stylesheet" type="text/css" href="/vendor/uploadify/uploadify.css">
 
@@ -259,15 +246,10 @@ function search() {
         <div id="user_toolbar">
             <div style="margin-bottom:5px">
                 <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">新增</a>
-                <span class="toolbar-btn-separator"></span>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit()">编辑</a>
-                <span class="toolbar-btn-separator"></span>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="del()">删除</a>
-                <span class="toolbar-btn-separator"></span>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="save()">保存</a>
-                <span class="toolbar-btn-separator"></span>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="cancelEdit()">取消编辑</a>
-                <span class="toolbar-btn-separator"></span>
                 <a href="#" class="easyui-linkbutton" iconCls="icon-undo" plain="true" onclick="cancelSelect()">取消选中</a>
             </div>
         </div>

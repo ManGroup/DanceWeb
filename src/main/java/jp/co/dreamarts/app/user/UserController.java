@@ -12,6 +12,10 @@ public class UserController extends Controller {
 
     public void list() {
 
+        String id = getRequest().getSession().getId();
+
+        System.out.println("Session Id :" + id);
+
         Integer page = getParaToInt("page");
 
         Page<User> userList = User.dao.getPage(page);
@@ -51,6 +55,7 @@ public class UserController extends Controller {
         for (Integer ids : getParaValuesToInt("ids")) {
             User.dao.deleteById(ids);
         }
+
         ResultExecute execute = new ResultExecute();
         execute.setCode(1);
         execute.setMsg("删除成功");

@@ -11,23 +11,30 @@ import java.util.List;
 public class ViewController extends Controller {
 
     public void list() {
-
-        List<User> userList = User.dao.getUserList();
-        setAttr("userList", userList);
         render("user_list.ftl");
     }
 
     public void menuJson () {
-
         render("json/menuJson.ftl");
     }
-    public void user() {
 
+    public void user() {
         render("user.ftl");
     }
-    public void portal() {
 
+    public void portal() {
         render("portal.ftl");
     }
 
+    public void course() {
+        render("course.ftl");
+    }
+
+    public void schedule() {
+        render("schedule.ftl");
+    }
+
+    public void notice() {
+        render("notice.ftl");
+    }
 }
