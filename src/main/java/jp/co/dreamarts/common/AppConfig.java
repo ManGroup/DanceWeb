@@ -8,6 +8,7 @@ import com.jfinal.core.JFinal;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.plugin.druid.DruidStatViewHandler;
+import jp.co.dreamarts.app.ViewController;
 import jp.co.dreamarts.app.user.User;
 import jp.co.dreamarts.app.user.UserController;
 
@@ -30,7 +31,10 @@ public class AppConfig extends JFinalConfig {
 	 * 配置路由
 	 */
 	public void configRoute(Routes me) {
+
         me.add("/", AppController.class);
+        me.add("/view", ViewController.class);
+
         me.add("/user", UserController.class);
 	}
 	
@@ -48,7 +52,7 @@ public class AppConfig extends JFinalConfig {
 
         // 配置ActiveRecord插件
         ActiveRecordPlugin arp = new ActiveRecordPlugin(dp);
-        arp.addMapping("s_user", User.class);
+        arp.addMapping("s_s_user", User.class);
         me.add(arp);
 
     }

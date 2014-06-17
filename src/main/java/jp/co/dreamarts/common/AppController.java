@@ -8,13 +8,12 @@ import com.jfinal.core.Controller;
 public class AppController extends Controller {
 
     public void index() {
-        System.out.println("good  job 3");
+        setAttr("root","");
         render("/index.html");
     }
 
     public void test(){
 
-        System.out.println("good  job test1111111122222");
-        render("/index.html");
+        render("/ftl/common/index.html");
     }
 }
