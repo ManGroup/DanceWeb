@@ -21,7 +21,7 @@ public class User extends Model<User> {
 
     public List<User> getUserList() {
 
-        return User.dao.find("select * from s_user");
+        return User.dao.find("select * from s_s_user");
     }
 
     public Page<User> getPage(int page) {
